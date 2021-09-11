@@ -83,7 +83,7 @@ sourceSets {
     }
 }
 
-//Module dependencis
+//Module dependencies
 dependencies {
     // Corda dependencies.
     cordaCompile "$corda_core_release_group:corda-core:$corda_core_release_version"
@@ -145,4 +145,39 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
 
+}
+
+def publishProjects = [project(":contracts"), project(":workflows")]
+
+configure(publishProjects) { subproject ->
+    apply plugin: 'maven-publish'
+
+    task sourceJar(type: Jar, dependsOn: subproject.classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: subproject.javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    task install(dependsOn: 'publishToMavenLocal')
+
+    publishing {
+        publications {
+            create(subproject.name, MavenPublication) {
+                from components.java
+
+                groupId subproject.group
+                artifactId "registeredAccount-${subproject.name}"
+                artifact tasks.sourceJar
+                artifact tasks.javadocJar
+
+                pom {
+                    description = subproject.description
+                }
+            }
+        }
+    }
 }
