@@ -28,17 +28,17 @@ class RASchemaV1: MappedSchema(
     ]
 )
 data class PersistentRA(
-    @Column(name = "id", unique = true, nullable = false)
-    val raUUID: UUID? = null,
+    @Column(name = "id", unique = true, nullable = false, columnDefinition = "varbinary not null")
+    val raUUID: UUID = UUID.randomUUID(),
 
-    @Column(name = "account_info_id", unique = true, nullable = false)
-    val aiUUID: UUID? = null,
+    @Column(name = "account_info_id", unique = true, nullable = false, columnDefinition = "varbinary not null")
+    val aiUUID: UUID = UUID.randomUUID(),
 
     @Column(name = "account_name", unique = false, nullable = false)
-    val acctName: String? = null,
+    val acctName: String = "",
 
     @Column(name = "account_type", unique = false, nullable = false)
-    val accountType: String? = null,
+    val accountType: String = "",
 
     @Column(name = "host", nullable = false)
     val host: Party? = null,
