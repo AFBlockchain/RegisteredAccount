@@ -1,0 +1,5 @@
+rpc:
+  username: user1
+  password: test
+  host: localhost
+  port: 10006

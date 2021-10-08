@@ -58,7 +58,7 @@ allprojects { //Properties that you need to compile your project (The applicatio
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
             languageVersion = "1.5"
-            apiVersion = "1.5"
+            apiVersion = "1.3"
             jvmTarget = "1.8"
             javaParameters = true   // Useful for reflection.
         }
@@ -97,22 +97,24 @@ dependencies {
     cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
+
+    //accounts
+    cordapp "$accounts_release_group:accounts-contracts:$accounts_release_version"
+    cordapp "$confidential_id_release_group:ci-workflows:$confidential_id_release_version"
+    cordapp "$accounts_release_group:accounts-workflows:$accounts_release_version"
 }
 
 //Task to deploy the nodes in order to bootstrap a network
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
-
-    /* This property will load the CorDapps to each of the node by default, including the Notary. You can find them
-     * in the cordapps folder of the node at build/nodes/Notary/cordapps. However, the notary doesn't really understand
-     * the notion of cordapps. In production, Notary does not need cordapps as well. This is just a short cut to load
-     * the Corda network bootstrapper.
-     */
     nodeDefaults {
         projectCordapp {
             deploy = false
         }
         cordapp project(':contracts')
         cordapp project(':workflows')
+        cordapp("$confidential_id_release_group:ci-workflows:$confidential_id_release_version")
+        cordapp("$accounts_release_group:accounts-contracts:$accounts_release_version")
+        cordapp("$accounts_release_group:accounts-workflows:$accounts_release_version")
         runSchemaMigration = true //This configuration is for any CorDapps with custom schema, We will leave this as true to avoid
         //problems for developers who are not familiar with Corda. If you are not using custom schemas, you can change
         //it to false for quicker project compiling time.
