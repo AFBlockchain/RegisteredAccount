@@ -46,17 +46,17 @@ fun StartedMockNode.identity() = info.legalIdentities[0]
 
 fun StartedMockNode.ra() = services.cordaService(PersistentRegisteredAccountService::class.java)
 
-fun assertHaveAccount(accountUid: UniqueIdentifier, vararg nodes: StartedMockNode,) {
+fun assertHaveAccount(accountUid: UniqueIdentifier, vararg nodes: StartedMockNode) {
     nodes.forEach { node ->
         assertNotNull(node.services.vaultService.queryBy(RegisteredAccount::class.java).states.find { accountUid == it.state.data.id })
     }
 }
 
-fun assertHaveAccount(ra: RegisteredAccount, vararg nodes: StartedMockNode,) {
+fun assertHaveAccount(ra: RegisteredAccount, vararg nodes: StartedMockNode) {
     assertHaveAccount(ra.id, *nodes)
 }
 
-fun assertHaveAccount(name: String, vararg nodes: StartedMockNode,) {
+fun assertHaveAccount(name: String, vararg nodes: StartedMockNode) {
     nodes.forEach { node ->
         assertNotNull(node.services.vaultService.queryBy(RegisteredAccount::class.java).states.find { name == it.state.data.acctName })
     }
@@ -64,7 +64,7 @@ fun assertHaveAccount(name: String, vararg nodes: StartedMockNode,) {
 
 fun StateAndRef<RegisteredAccount>.assertEquals(other: StateAndRef<RegisteredAccount>?) {
     assertNotNull(other)
-    kotlin.test.assertEquals(this.state.data.id, other.state.data.id)
+    kotlin.test.assertEquals(this.state.data.id, other!!.state.data.id)
 }
 
 

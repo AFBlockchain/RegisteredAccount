@@ -46,7 +46,7 @@ class CreateAndRegisterAccount(
     private val raName: String,
     private val aiName: String = raName,
     private val details: AccountDetails,
-    private val registry: Party? = null,
+    private val registry: Party? = null
 ): FlowLogic<StateAndRef<RegisteredAccount>>() {
     @Suspendable
     override fun call(): StateAndRef<RegisteredAccount> {

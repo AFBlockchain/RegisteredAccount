@@ -44,7 +44,7 @@ data class PersistentRA(
     var host: Party? = null,
 
     @Column(name = "registry", nullable = false)
-    var registry: Party? = null,
+    var registry: Party? = null
 ): PersistentState() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

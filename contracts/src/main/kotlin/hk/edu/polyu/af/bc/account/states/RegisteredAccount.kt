@@ -21,7 +21,7 @@ data class RegisteredAccount(
     val acctDetails: AccountDetails,
     val host: Party,
     val registry: Party = host,
-    val id: UniqueIdentifier = UniqueIdentifier(),
+    val id: UniqueIdentifier = UniqueIdentifier()
 ): ContractState, LinearState, QueryableState {
     override val participants: List<AbstractParty>
         get() = setOf(host, registry).toList() // make sure no duplicates
